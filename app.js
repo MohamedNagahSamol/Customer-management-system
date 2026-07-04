@@ -1,82 +1,38 @@
 const express = require("express");
+const path = require("path");
 const app = express();
-
-const moment = require("moment");
-
-app.set("view engine", "ejs");
-app.use(express.static("public"));
-
-const method = require("method-override");
-app.use(method("_method"));
-
-app.use(express.urlencoded({ extended: true }));
-
+const port = process.env.PORT || 3001;
 const mongoose = require("mongoose");
+app.use(express.urlencoded({ extended: true }));
+app.set("view engine", "ejs");
+app.set("views", __dirname + "/views");
+app.use(express.static("public"));
+var methodOverride = require("method-override");
+app.use(methodOverride("_method"));
+const allRoutes = require("./routes/allRoutes");
+const addUserRoute = require("./routes/addUser");
+
+app.use(express.json())
+// cookie-parser
+var cookieParser = require('cookie-parser')
+app.use(cookieParser())
+
+require('dotenv').config()
+
+if (process.env.NODE_ENV === 'production') {
+  app.set('view cache', true);
+}
 
 mongoose
-  .connect("mongodb://127.0.0.1:27017/myProject")
-  .then(() => console.log("Connected!"));
-const custmer = require("./models/modelcustomer");
-
-app.get("/", (req, res) => {
-  custmer
-    .find()
-    .then((data) => {
-      res.render("index", { data: data, moment: moment });
-    })
-    .catch((err) => {
-      console.log(err);
+  .connect(process.env.MONGO_URI || 'mongodb://localhost:27017/myapp')
+  .then(() => {
+    app.listen(3001, () => {
+      console.log(`http://localhost:${3001}/`);
     });
-});
-app.get("/user/add.html", (req, res) => {
-  res.render("user/add");
-});
-
-// app.post('/user/view.html',(req,res)=>{
-//        custmer.updateOne(req.body)
-//     .then(()=>{res.redirect('/')})
-//     .catch(()=>{console.log('faluse')})
-// })
-
-app.post("/user/add.html", (req, res) => {
-  // console.log(req.body)
-  custmer
-    .create(req.body)
-    .then(() => {
-      res.redirect("/");
-    })
-    .catch(() => {
-      console.log("faluse");
-    });
-});
-app.get('/welcom/auth/login',(req,res)=>{
-  res.render('welcom')
-})
-app.get("/user/:id", (req, res) => {
-  //res.render("user/edit");
-  custmer.findById(req.params.id).then((data) => {
-    res.render("user/edit", { data: data, moment: moment });
+  })
+  .catch((err) => {
+    console.log(err);
   });
-});
 
-app.get("/user/:id", (req, res) => {
-  custmer.findById(req.params.id).then((user) => {
-    res.render("user/view", { user: user, moment: moment });
-  });
-});
-
-app.post('/search',(req,res)=>{
-    custmer.find({frist_name:req.body.name})
-    .then((data)=>{res.render('index',{data:data,moment:moment})})
-})
-app.put("/edit/:id", (req, res) => {
- 
-  custmer.updateOne({ _id: req.params.id }, { $set: req.body }).then((data) => {
-    res.redirect("/");
-  });
-});
-app.delete("/delete/:id", (req, res) => {
-  
-  custmer.deleteOne({ _id: req.params.id }).then(res.redirect("/"));
-});
-app.listen(2000, () => {});
+app.use(allRoutes);
+app.use( "/user/add.html",addUserRoute);

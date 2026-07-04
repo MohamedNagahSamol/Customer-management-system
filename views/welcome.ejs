@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <script src="./js/color-modes.js"></script>
+    <link
+      rel="stylesheet"
+      href="./bootstrap-icons-1.10.5/font/bootstrap-icons.min.css"
+    />
+    <link rel="icon" href="./img/favicon.svg" type="image/svg+xml">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="X-system - Data management platform for organizing and storing organizational data" />
+    <meta name="author" content="X-system" />
+    <title>X-system — Data Management</title>
+
+    <link href="./css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="./css/dark-light.css" />
+    <link href="./css/sidebars.css" rel="stylesheet" />
+    <link rel="stylesheet" href="./css/myStyle.css" />
+    <style>
+body {
+  text-shadow: 0 .05rem .1rem rgba(0, 0, 0, .5);
+  box-shadow: inset 0 0 5rem rgba(0, 0, 0, .5);
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+}
+
+.cover-container {
+  max-width: 44em;
+}
+
+.hero-icon {
+  width: 64px;
+  height: 64px;
+  margin-bottom: 1.5rem;
+  filter: drop-shadow(0 4px 12px rgba(37, 99, 235, 0.3));
+}
+
+.feature-list {
+  list-style: none;
+  padding: 0;
+  margin: 2rem 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.feature-list li {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 2rem;
+  padding: 0.4rem 1.2rem;
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(4px);
+}
+
+.feature-list li i {
+  margin-right: 0.4rem;
+  color: #60a5fa;
+}
+
+.btn-ghost {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.8);
+  transition: all 0.2s ease;
+}
+
+.btn-ghost:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.3);
+  color: #fff;
+}
+    </style>
+  </head>
+  <body class="d-flex h-100 text-center text-bg-dark">
+    <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
+      <%- include('./auth/header.ejs', {currentPage: "welcome"}) %>
+
+      <main class="px-3 d-flex flex-column align-items-center justify-content-center">
+        <img src="./img/logo.svg" alt="X-system" class="hero-icon">
+        <h1 class="display-4 fw-bold mb-3">
+          Welcome to <span class="text-primary">X-system</span>
+        </h1>
+        <p class="lead mb-4" style="color: rgba(255,255,255,0.7); max-width: 32em;">
+          A powerful data management platform for storing, organizing, and managing your organization's data with precision and ease.
+        </p>
+        <ul class="feature-list">
+          <li><i class="bi bi-database"></i> Secure Storage</li>
+          <li><i class="bi bi-search"></i> Smart Search</li>
+          <li><i class="bi bi-people"></i> User Management</li>
+          <li><i class="bi bi-graph-up"></i> Real-time Updates</li>
+        </ul>
+        <p class="lead d-flex gap-3 justify-content-center">
+          <a href="/home" class="btn btn-lg btn-primary fw-bold px-4">
+            <i class="bi bi-speedometer2 me-2"></i>Dashboard
+          </a>
+          <a href="#" class="btn btn-lg btn-ghost fw-medium px-4">
+            Contact sales
+          </a>
+        </p>
+      </main>
+
+      <footer class="mt-auto text-white-50">
+        <p class="small">Designed and developed by mohamed nagah &copy; 2023</p>
+      </footer>
+    </div>
+    <script src="./js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

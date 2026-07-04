@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <script src="./js/color-modes.js"></script>
+    <link rel="stylesheet" href="./bootstrap-icons-1.10.5/font/bootstrap-icons.min.css" />
+    <link rel="icon" href="./img/favicon.svg" type="image/svg+xml">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Create an X-system account" />
+    <title>Sign Up — X-system</title>
+
+    <link href="./css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="./css/dark-light.css" />
+    <link href="./css/sidebars.css" rel="stylesheet" />
+    <link rel="stylesheet" href="./css/myStyle.css" />
+    <style>
+      body {
+        text-shadow: 0 0.05rem 0.1rem rgba(0, 0, 0, 0.5);
+        box-shadow: inset 0 0 5rem rgba(0, 0, 0, 0.5);
+        background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+      }
+      .cover-container { max-width: 24em; }
+      .form-control {
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        color: #fff;
+        padding: 0.7rem 1rem;
+      }
+      .form-control:focus {
+        background: rgba(255, 255, 255, 0.08);
+        border-color: #2563eb;
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+        color: #fff;
+      }
+      .form-control::placeholder { color: rgba(255, 255, 255, 0.3); }
+      .form-label { color: rgba(255, 255, 255, 0.8); font-size: 0.85rem; font-weight: 500; }
+      .form-check-label { color: rgba(255, 255, 255, 0.6); font-size: 0.85rem; }
+    </style>
+  </head>
+  <body class="d-flex h-100 text-center text-bg-dark">
+    <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
+      <%- include('./header.ejs', {currentPage: "signup"}) %>
+
+      <main class="px-3 d-flex flex-column justify-content-center">
+        <div class="mb-4">
+          <img src="./img/logo.svg" alt="X-system" width="48" height="48" class="mb-3" style="filter: drop-shadow(0 4px 12px rgba(37,99,235,0.3));">
+          <h3 class="fw-bold">Create account</h3>
+          <p class="text-white-50 small">Get started with your free account</p>
+        </div>
+
+        <form id="signupForm" class="text-start mx-auto w-100">
+          <div class="mb-3">
+            <label for="exampleInputUsername" class="form-label">Username</label>
+            <input type="text" class="form-control" id="exampleInputUsername" name="username" autocomplete="username" placeholder="Choose a username" />
+          </div>
+          <div class="mb-3">
+            <label for="exampleInputEmail1" class="form-label">Email address</label>
+            <input type="email" class="form-control" id="exampleInputEmail1" name="email" autocomplete="email" placeholder="you@example.com" />
+            <p id="emailError" class="small mt-1"></p>
+          </div>
+          <div class="mb-4">
+            <label for="exampleInputPassword1" class="form-label">Password</label>
+            <input type="password" class="form-control" id="exampleInputPassword1" name="password" autocomplete="new-password" placeholder="Create a strong password" />
+            <p id="passwordError" class="small mt-1"></p>
+          </div>
+          <button type="submit" class="btn btn-primary w-100 py-2 fw-semibold">
+            <i class="bi bi-person-plus me-2"></i>Create Account
+          </button>
+        </form>
+        <p class="mt-4 text-white-50 small">
+          Already have an account? <a href="/login" class="text-white fw-medium">Sign in</a>
+        </p>
+      </main>
+
+      <footer class="mt-auto text-white-50">
+        <p class="small">Designed and developed by Ali Hassan &copy; 2023</p>
+      </footer>
+    </div>
+    <script>
+      signupForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        emailError.textContent = "";
+        passwordError.textContent = "";
+
+        const res = await fetch("/signup", {
+          method: "POST",
+          body: JSON.stringify({
+            username: exampleInputUsername.value,
+            email: exampleInputEmail1.value,
+            password: exampleInputPassword1.value,
+          }),
+          headers: { "Content-Type": "application/json" },
+        });
+
+        const data = await res.json();
+
+        if (data.arrValidationError) {
+          data.arrValidationError.forEach(item => {
+            if (item.path == "email") {
+              emailError.textContent = "Please provide a valid email";
+            }
+            if (item.path == "password") {
+              passwordError.textContent = "Password must be at least 8 characters with 1 upper case letter and 1 number";
+            }
+          });
+        }
+
+        if (data.existEmail) {
+          emailError.textContent = "Email already exists. Try to login";
+        }
+
+        if (data.id) {
+          location.assign("/home");
+        }
+      });
+    </script>
+    <script src="./js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>
